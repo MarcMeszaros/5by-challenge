@@ -9,6 +9,7 @@ public class Video {
     public String author_name;
     public String caption;
     public Date created_at;
+    public String title;
 
     public String toString() {
         return Objects.toStringHelper(this)
