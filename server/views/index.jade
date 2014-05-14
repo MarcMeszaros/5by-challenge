@@ -1,5 +1,15 @@
 extends layout
 
 block content
-    h1= title
-    p Hello world
+    #header.col-lg-12
+        h1= title
+    #videos.col-lg-12
+
+    #footer.col-lg-12
+        .col-lg-9
+            ul
+                li &copy; 2014 Marc M. |
+                li: a(href='http://blog.marcmeszaros.ca') Blog
+
+block js_body
+    script(src='/js/videos.js')

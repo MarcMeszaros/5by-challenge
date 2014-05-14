@@ -2,7 +2,15 @@ doctype html
 html
     head
         title= title
+        
         link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css')
+        link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap-theme.min.css')
+        link(rel='stylesheet', href='/css/global.css')
+        block css_head
+
+        script(src='/js/global.js')
+        block js_head
     body
-        block content
-        //script(src='/javascripts/global.js')
+        .container
+            block content
+        block js_body
