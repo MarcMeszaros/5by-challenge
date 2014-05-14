@@ -8,9 +8,21 @@ router.get('/videos', function(req, res) {
     db.bind('meta')
     db.bind('videos')
 
+    // some defaults
+    var limit = parseInt(req.query.limit) || 30;
+    var offset = parseInt(req.query.offset) || 0;
+
     // get from the local DB
-    db.videos.find().toArray(function (err, items) {
-        res.json(items);
+    db.videos.find().skip(offset).limit(limit).toArray(function (err, items) {
+        var result = {
+            'meta': {
+                'limit': limit,
+                'offset': offset
+            },
+            'objects': items
+        };
+
+        res.json(result);
     });
 
     // resume using the after param
@@ -34,6 +46,7 @@ router.get('/videos', function(req, res) {
                 }
             }
 
+            // update the stored value for the after param for reddit
             db.meta.update({'name': 'after'}, {'name': 'after', 'value': after}, {upsert: true}, function(err, result){});
           }
         });
