@@ -12,7 +12,7 @@ router.get('/videos', function(req, res) {
     var limit = parseInt(req.query.limit) || 30;
     var offset = parseInt(req.query.offset) || 0;
 
-    // get from the local DB
+    // get data from the local DB + quick/dirty formatting of result response
     db.videos.find().skip(offset).limit(limit).toArray(function (err, items) {
         var result = {
             'meta': {
@@ -30,6 +30,9 @@ router.get('/videos', function(req, res) {
         var url = 'http://www.reddit.com/hot.json?after=' + doc.value;
 
         // get from redit
+        // TODO: build some sort of worker/job queue to do this in the background
+        // instead of "piggybacking" off the API call to get the next page from
+        // reddit
         request(url, function (error, response, body) {
           if (!error && response.statusCode == 200) {
             json = JSON.parse(body)
