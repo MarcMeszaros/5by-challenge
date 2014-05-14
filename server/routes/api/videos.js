@@ -26,9 +26,12 @@ router.get('/videos', function(req, res) {
 
             // insert the API values
             for (var i = 0; i < children.length; i++) {
-                db.videos.insert(children[i].data, function(err, result){
-                    // 
-                });
+                // quick and dirty check to only add youtube videos to our db
+                if (children[i].data.media && children[i].data.media.type == 'youtube.com') {
+                    db.videos.insert(children[i].data, function(err, result){
+                        // 
+                    });
+                }
             }
 
             db.meta.update({'name': 'after'}, {'name': 'after', 'value': after}, {upsert: true}, function(err, result){});
