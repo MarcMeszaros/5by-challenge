@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/listview_row_video"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@drawable/background__polaroid_rectangle"
+    android:padding="10dp" >
+
+    <ImageView
+        android:id="@+id/listview_row_event__cover"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/a11y__listview_row_video__cover"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/photo_blank" />
+
+    <TextView
+        android:id="@+id/listview_row_event__title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/listview_row_event__cover"
+        android:padding="5dp"
+        android:textStyle="bold"
+        tools:text="My Awesome Video" />
+
+    <TextView
+        android:id="@+id/listview_row_event__description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/listview_row_event__cover"
+        android:layout_below="@id/listview_row_event__title"
+        android:padding="5dp"
+        tools:text="My awesome description" />
+
+</RelativeLayout>

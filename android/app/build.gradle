@@ -1,3 +1,8 @@
+// application dependency repositories
+repositories {
+    mavenCentral()
+}
+
 apply plugin: 'android'
 
 android {
@@ -19,6 +24,11 @@ android {
 }
 
 dependencies {
+    // REST API libraries
+    compile 'com.squareup.retrofit:retrofit:1.5.+' // REST client
+    compile 'com.squareup.okhttp:okhttp:1.5.+' // optimized http client
+    compile 'com.google.guava:guava:16.+' // helper classes to pretty print REST API objects
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:19.+'
 }

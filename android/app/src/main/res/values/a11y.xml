@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ListView Rows -->
+    <string name="a11y__listview_row_video__cover">Video cover photo</string>
+
+</resources>

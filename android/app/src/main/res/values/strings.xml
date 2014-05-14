@@ -4,5 +4,8 @@
     <string name="app_name">5by Challenge</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    
+    <!-- Fragments -->
+    <string name="fragment_video_list__empty">Some clever message saying we are loading…</string>
 
 </resources>
