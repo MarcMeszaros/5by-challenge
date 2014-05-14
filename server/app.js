@@ -5,7 +5,8 @@ var path = require('path');
 var mongo = require('mongoskin');
 var db = mongo.db("mongodb://localhost:27017/5by-challenge", {native_parser:true});
 
-var routes = require('./routes/index');
+var index = require('./routes/index');
+var api_videos = require('./routes/api/videos');
 
 var app = express();
 
@@ -22,6 +23,7 @@ app.use(function(req,res,next){
 });
 
 // routes to use
-app.use('/', routes);
+app.use('/', index);
+app.use('/api', api_videos);
 
 module.exports = app;
