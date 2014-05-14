@@ -54,12 +54,22 @@ function create_video_dom(video) {
     gotovid.innerHTML = '<span class="glyphicon glyphicon-play-circle"></span> Go To Video';
     controls.appendChild(gotovid);
 
-    /*
     var deletevid = document.createElement('button');
     deletevid.className = 'btn btn-danger';
     deletevid.innerHTML = '<span class="glyphicon glyphicon-trash"></span>';
+    deletevid.onclick = function(event) {
+        ajax({
+            type: 'DELETE',
+            url: '/api/videos/'+video._id
+        }, function(resp){
+            console.log('deleted!');
+            elem.parentNode.removeChild(elem);
+        }, function(resp){
+            // TODO handle error
+            console.error('cannot delete!');
+        });
+    };
     controls.appendChild(deletevid);
-    */
 
     // assemble
     right.appendChild(details);
