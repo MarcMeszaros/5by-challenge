@@ -49,8 +49,8 @@ public class VideoListAdapter extends ArrayAdapter<Video> {
 
         // set the data
         Video video = getItem(position);
-        holder.title.setText(video.title);
-        holder.description.setText(video.title);
+        holder.title.setText(video.media.oembed.title);
+        holder.description.setText(video.media.oembed.description);
 
         return convertView;
     }

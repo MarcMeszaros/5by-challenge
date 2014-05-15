@@ -7,6 +7,7 @@ import retrofit.client.*;
 public class Client extends BaseClient {
 
     public static final String BASE_URL = "http://localhost:3000/api/";
+    public static final String BASE_URL_DEV = "http://192.168.1.155:3000/api/";
 
     public Client() {
         super(BASE_URL);
