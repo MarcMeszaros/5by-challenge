@@ -7,11 +7,9 @@
     android:layout_margin="10dp"
     android:orientation="vertical" >
 
-    <WebView
+    <ca.marcmeszaros.fivebychallenge.utils.WebView
         android:id="@+id/fragment_video_webview__webview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </WebView>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

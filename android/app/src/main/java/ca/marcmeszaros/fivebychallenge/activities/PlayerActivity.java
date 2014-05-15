@@ -23,10 +23,10 @@ public class PlayerActivity extends Activity {
         // only do this if we are not restoring
         if (savedInstanceState == null && findViewById(R.id.activity_player__fragment_video_webview) != null) {
             // the url to watch
-            String url = getIntent().getAction();
-            Log.d(TAG, "url: " + url);
+            String video_id = getIntent().getAction();
+            Log.d(TAG, "video_id: " + video_id);
             Bundle args = new Bundle(1);
-            args.putString("url", url);
+            args.putString("video_id", video_id);
 
             // build/attach the fragment
             VideoWebViewFragment newFragment = new VideoWebViewFragment();

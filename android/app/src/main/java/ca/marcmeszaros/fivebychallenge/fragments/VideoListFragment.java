@@ -92,9 +92,8 @@ public class VideoListFragment extends FivebyListFragment implements LoaderManag
         Video video = (Video) getListAdapter().getItem(position);
 
         // setup the intent to start the player activity
-        Uri uri = Uri.parse(video.media.oembed.url);
         Intent intent = new Intent(getActivity(), PlayerActivity.class);
-        intent.setAction(video.media.oembed.url);
+        intent.setAction(video.media.oembed.video_id);
         startActivity(intent);
     }
 }
