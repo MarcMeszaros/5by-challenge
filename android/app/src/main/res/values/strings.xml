@@ -6,6 +6,6 @@
     <string name="action_settings">Settings</string>
     
     <!-- Fragments -->
-    <string name="fragment_video_list__empty">Some clever message saying we are loading…</string>
+    <string name="fragment_video_list__empty">Unable to load any videos…</string>
 
 </resources>
