@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import java.util.List;
 
 import ca.marcmeszaros.fivebychallenge.R;
+import ca.marcmeszaros.fivebychallenge.activities.PlayerActivity;
 import ca.marcmeszaros.fivebychallenge.adapters.VideoListAdapter;
 import ca.marcmeszaros.fivebychallenge.loaders.VideoListLoader;
 import ca.marcmeszaros.fivebychallenge.api.v1.objects.Video;
@@ -90,9 +91,10 @@ public class VideoListFragment extends FivebyListFragment implements LoaderManag
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Video video = (Video) getListAdapter().getItem(position);
 
-        //Uri uri = Uri.parse("http://www.example.com");
+        // setup the intent to start the player activity
         Uri uri = Uri.parse(video.media.oembed.url);
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        Intent intent = new Intent(getActivity(), PlayerActivity.class);
+        intent.setAction(video.media.oembed.url);
         startActivity(intent);
     }
 }

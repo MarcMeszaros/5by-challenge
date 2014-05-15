@@ -6,9 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <fragment
+    <FrameLayout
         android:id="@+id/activity_player__fragment_video_webview"
-        android:name="ca.marcmeszaros.fivebychallenge.fragments.VideoWebview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_video_webview" />

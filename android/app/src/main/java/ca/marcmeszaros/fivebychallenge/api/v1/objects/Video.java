@@ -31,6 +31,7 @@ public class Video {
             public String description;
             public String thumbnail_url;
             public String url;
+            public String video_id;
 
             public String toString() {
                 return Objects.toStringHelper(this)
@@ -38,6 +39,7 @@ public class Video {
                         .add("description", this.description)
                         .add("thumbnail_url", this.thumbnail_url)
                         .add("url", this.url)
+                        .add("video_id", this.video_id)
                         .toString();
             }
         }
