@@ -30,12 +30,14 @@ public class Video {
             public String title;
             public String description;
             public String thumbnail_url;
+            public String url;
 
             public String toString() {
                 return Objects.toStringHelper(this)
                         .add("title", this.title)
                         .add("description", this.description)
                         .add("thumbnail_url", this.thumbnail_url)
+                        .add("url", this.url)
                         .toString();
             }
         }

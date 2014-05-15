@@ -1,12 +1,15 @@
 package ca.marcmeszaros.fivebychallenge.fragments;
 
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import java.util.List;
 
@@ -15,7 +18,7 @@ import ca.marcmeszaros.fivebychallenge.adapters.VideoListAdapter;
 import ca.marcmeszaros.fivebychallenge.loaders.VideoListLoader;
 import ca.marcmeszaros.fivebychallenge.api.v1.objects.Video;
 
-public class VideoListFragment extends FivebyListFragment implements LoaderManager.LoaderCallbacks<List<Video>> {
+public class VideoListFragment extends FivebyListFragment implements LoaderManager.LoaderCallbacks<List<Video>>, AdapterView.OnItemClickListener {
 
     private static final String TAG = "VideoListFragment";
 
@@ -31,6 +34,9 @@ public class VideoListFragment extends FivebyListFragment implements LoaderManag
 
         videoAdapter = new VideoListAdapter(getActivity());
         setListAdapter(videoAdapter);
+
+        // setup click listener
+        getListView().setOnItemClickListener(this);
 
         // initialize the loader
         Bundle args = new Bundle(1);
@@ -79,5 +85,14 @@ public class VideoListFragment extends FivebyListFragment implements LoaderManag
         // longer using it.
         Log.d(TAG, "loader reset");
         videoAdapter.setData(null);
+    }
+
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Video video = (Video) getListAdapter().getItem(position);
+
+        //Uri uri = Uri.parse("http://www.example.com");
+        Uri uri = Uri.parse(video.media.oembed.url);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 }

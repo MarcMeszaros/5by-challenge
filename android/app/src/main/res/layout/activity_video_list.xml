@@ -1,4 +1,4 @@
-
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_video_list"
@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <fragment
-    android:id="@+id/activity_event_list__fragment_event_list"
+    android:id="@+id/activity_video_list__fragment_video_list"
     android:name="ca.marcmeszaros.fivebychallenge.fragments.VideoListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
