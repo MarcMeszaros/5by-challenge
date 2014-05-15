@@ -28,4 +28,12 @@ The following system requirements are assumed to be installed.
 videos in the DB (see comments in code).
 
 # Android
-Android stuff here...
+The Android application uses the REST API from the server project. Make sure
+the server is running before you try to use the Android application.
+
+## Setup
+1. Download Android Studion
+2. Import the project using Android Studion
+3. Determine the public IP of the server, and modify ``android/app/build.gradle`` and 
+make sure the ``API_HOST`` value points to your server and is accessible by the device
+4. Run the application

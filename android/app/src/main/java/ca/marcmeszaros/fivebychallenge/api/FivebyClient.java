@@ -26,7 +26,9 @@ public class FivebyClient extends Client {
     public static FivebyClient getInstance() {
         if (instance == null) {
             synchronized (instanceMutex) {
-                if (BuildConfig.DEBUG) {
+                if (BuildConfig.API_HOST != null) {
+                    instance = new FivebyClient(BuildConfig.API_HOST);
+                } else if (BuildConfig.DEBUG) {
                     instance = new FivebyClient(Client.BASE_URL_DEV);
                 } else {
                     instance = new FivebyClient(Client.BASE_URL);

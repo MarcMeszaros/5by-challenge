@@ -16,9 +16,16 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        debug {
+            debuggable true
+            runProguard false
+            proguardFile getDefaultProguardFile('proguard-android.txt')
+            buildConfigField 'String', 'API_HOST', '"http://192.168.1.155:3000/api/"'
+        }
         release {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            buildConfigField 'String', 'API_HOST', '"http://localhost:3000/api/"'
         }
     }
 }
