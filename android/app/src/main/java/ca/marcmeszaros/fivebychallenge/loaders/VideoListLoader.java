@@ -2,6 +2,7 @@ package ca.marcmeszaros.fivebychallenge.loaders;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +29,11 @@ public class VideoListLoader extends AsyncTaskLoader<List<Video>> {
 
     @Override
     public List<Video> loadInBackground() {
-        if (netInfo.isConnected() && netInfo.isConnectedToServer(FivebyClient.getInstance().getBaseUrl(), 2)) {
+        if (netInfo.isConnected()) {
             Pager<Video> videos = videoRes.getVideos();
             return videos.objects;
         }
+        Log.i(TAG, "No network?");
         return new ArrayList<Video>();
     }
 }
