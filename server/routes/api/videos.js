@@ -15,11 +15,11 @@ router.get('/videos', function(req, res) {
     db.bind('videos')
 
     // some defaults
-    var limit = parseInt(req.query.limit) || 30;
+    var limit = parseInt(req.query.limit) || 50;
     var offset = parseInt(req.query.offset) || 0;
 
     // get data from the local DB + quick/dirty formatting of result response
-    db.videos.find().skip(offset).limit(limit).toArray(function (err, items) {
+    db.videos.find().skip(offset).limit(limit).sort({created_utc: -1}).toArray(function (err, items) {
         var result = {
             'meta': {
                 'limit': limit,
