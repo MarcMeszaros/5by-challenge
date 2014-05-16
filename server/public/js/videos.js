@@ -121,14 +121,17 @@ function load_videos(offset, limit) {
         params: parameters
     }, function(resp){
         var json = JSON.parse(resp);
+        var videos = document.getElementById('videos');
 
         // loop through the videos, build the dom object and append
         for (var i = 0; i < json.objects.length; i++) {
             var elem = create_video_dom(json.objects[i]);
             var video_id = json.objects[i].media.oembed.video_id;
-            document.getElementById('videos').appendChild(elem);
             var stats = elem.getElementsByClassName('stats')[0];
-            
+
+            // append the video
+            videos.appendChild(elem);
+
             // make the call to get data from youtube
             youtube_details(video_id, {
                 el: stats
@@ -164,7 +167,35 @@ function load_videos(offset, limit) {
                 el.innerHTML = uploaded + likes + views;
             });
         };
+
+        // update/set API offset metadata in the DOM
+        if (videos.getAttribute('data-offset')) {
+            var offset = parseInt(videos.getAttribute('data-offset'));
+            videos.setAttribute('data-offset', parseInt(json.objects.length) + offset);
+        } else {
+            videos.setAttribute('data-offset', json.objects.length);
+        }
     });
 }
 
+// detect scroll event on the page
+window.onscroll = function(ev) {
+    // easier to understand these variable names
+    var scrollPos = (window.innerHeight + window.scrollY);
+    var pageHeight = document.body.offsetHeight;
+
+    // if we scroll past the bottom of the page
+    // (and debounce by only listening for + 1 pixel past the bottom)
+    if (scrollPos >= pageHeight && scrollPos < (pageHeight + 1) ) {
+        // check if there is API offset metadata set in the DOM
+        var offset = 0;
+        if (videos.getAttribute('data-offset')) {
+            offset = parseInt(videos.getAttribute('data-offset'));
+        }
+        // load more videos using the offset value
+        load_videos(offset);
+    }
+};
+
+// initial video load
 load_videos();
