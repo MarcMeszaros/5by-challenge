@@ -49,7 +49,7 @@ function create_video_dom(video) {
     videoDetails.className = 'details';
     videoDetails.innerHTML = '<span class="glyphicon glyphicon-film"></span><span class="definition"></span>'
         + ' - <span class="glyphicon glyphicon-user"></span>'
-        + ' <a href="' + video.media.oembed.author_url + '">' + video.media.oembed.author_name + '</a>';
+        + ' <a target="_blank" href="' + video.media.oembed.author_url + '">' + video.media.oembed.author_name + '</a>';
     details.appendChild(videoDetails);
 
     // stats
