@@ -3,6 +3,18 @@ var youtube_base_url = 'https://www.googleapis.com/youtube/v3/videos';
 var youtube_api_key = 'AIzaSyBUHESSsR4ijJ3pFrExVePUQhTs8ulEEuk';
 
 /**
+Helper function.
+http://stackoverflow.com/questions/5223/length-of-javascript-object-ie-associative-array
+*/
+Object.size = function(obj) {
+    var size = 0, key;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
+};
+
+/**
 An ajax helper method.
 
 Options:
@@ -10,6 +22,7 @@ Options:
     type - the type of request (GET,POST,PUT,PATCH,DELETE)
     el - a DOM element to pass down to the callback functions
     save - save the response to localstorage
+    params - dict of params to add to a GET request
 
 TODO: make it more robust and handle POST requests 
 (right now it's only really designed for GET)
@@ -17,9 +30,20 @@ TODO: make it more robust and handle POST requests
 function ajax(options, success, failure) {
     var option = options || {};
     var url = options.url || 'http://localhost:3000/api/videos';
+    var params = options.params || {};
     var type = options.type || 'GET';
     var el = options.el || null; // allow DOM elem, to pass down to callbacks
     var save = options.save || false; // save the response
+
+    // add the paramaters
+    if (type == 'GET' && Object.size(params) > 0) {
+        url += '?'
+        for (var key in params) {
+            url += (key + '=' + params[key] + '&');
+        }
+        // I like clean URLs, remove the last '&'
+        url = url.substring(0, url.length - 1);
+    }
 
     // create the xhr request
     var xmlhttp;

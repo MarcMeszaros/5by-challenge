@@ -100,54 +100,71 @@ function create_video_dom(video) {
     return elem;
 }
 
-// use our helper function to make an ajax call to our API to get the list of
-// videos, iterate through the items, build each listing using the function above
-ajax({
-    type: 'GET',
-    url: '/api/videos'
-}, function(resp){
-    var json = JSON.parse(resp);
+/**
+Load videos and append them to the div on the page for the video list.
+*/
+function load_videos(offset, limit) {
+    // add the parameters
+    var parameters = {};
+    if (typeof(offset) !== 'undefined') {
+        parameters['offset'] = offset;
+    }
+    if (typeof(limit) !== 'undefined') {
+        parameters['limit'] = limit;
+    }
 
-    // loop through the videos, build the dom object and append
-    for (var i = 0; i < json.objects.length; i++) {
-        var elem = create_video_dom(json.objects[i]);
-        var video_id = json.objects[i].media.oembed.video_id;
-        document.getElementById('videos').appendChild(elem);
-        var stats = elem.getElementsByClassName('stats')[0];
-        
-        // make the call to get data from youtube
-        youtube_details(video_id, {
-            el: stats
-        }, function(resp, el) {
-            var json = JSON.parse(resp);
-            
-            // add the video quality
-            var details = el.parentNode.getElementsByClassName('details')[0];
-            var definition = details.getElementsByClassName('definition')[0];
-            definition.innerHTML = ' ' + json.items[0].contentDetails.definition.toUpperCase()
+    // use our helper function to make an ajax call to our API to get the list of
+    // videos, iterate through the items, build each listing using the function above
+    ajax({
+        type: 'GET',
+        url: '/api/videos',
+        params: parameters
+    }, function(resp){
+        var json = JSON.parse(resp);
 
-            // add the stats
-            var uploaded = '<p><span class="glyphicon glyphicon-cloud-upload"></span> ' + date2human(json.items[0].snippet.publishedAt) + '</p>';
-            var likes = '<p>'
-                + '<span class="glyphicon glyphicon-thumbs-up"></span> '
-                + numberWithCommas(json.items[0].statistics.likeCount) + ' likes'
-                + '&nbsp;&nbsp;'
-                + '<span class="glyphicon glyphicon-thumbs-down"></span> '
-                + numberWithCommas(json.items[0].statistics.dislikeCount) + ' dislikes'
-                + '&nbsp;&nbsp;'
-                + '<span class="glyphicon glyphicon-heart"></span> '
-                + numberWithCommas(json.items[0].statistics.favoriteCount) + ' favorites'
-                + '</p>';
-            var views = '<p>' 
-                + '<span class="glyphicon glyphicon-eye-open"></span> ' 
-                + numberWithCommas(json.items[0].statistics.viewCount) + ' views'
-                + '&nbsp;&nbsp;'
-                + '<span class="glyphicon glyphicon glyphicon-comment"></span> '
-                + numberWithCommas(json.items[0].statistics.commentCount) + ' comments'
-                + '</p>';
+        // loop through the videos, build the dom object and append
+        for (var i = 0; i < json.objects.length; i++) {
+            var elem = create_video_dom(json.objects[i]);
+            var video_id = json.objects[i].media.oembed.video_id;
+            document.getElementById('videos').appendChild(elem);
+            var stats = elem.getElementsByClassName('stats')[0];
             
-            // combine the parts/update the html
-            el.innerHTML = uploaded + likes + views;
-        });
-    };
-});
+            // make the call to get data from youtube
+            youtube_details(video_id, {
+                el: stats
+            }, function(resp, el) {
+                var json = JSON.parse(resp);
+                
+                // add the video quality
+                var details = el.parentNode.getElementsByClassName('details')[0];
+                var definition = details.getElementsByClassName('definition')[0];
+                definition.innerHTML = ' ' + json.items[0].contentDetails.definition.toUpperCase()
+
+                // add the stats
+                var uploaded = '<p><span class="glyphicon glyphicon-cloud-upload"></span> ' + date2human(json.items[0].snippet.publishedAt) + '</p>';
+                var likes = '<p>'
+                    + '<span class="glyphicon glyphicon-thumbs-up"></span> '
+                    + numberWithCommas(json.items[0].statistics.likeCount) + ' likes'
+                    + '&nbsp;&nbsp;'
+                    + '<span class="glyphicon glyphicon-thumbs-down"></span> '
+                    + numberWithCommas(json.items[0].statistics.dislikeCount) + ' dislikes'
+                    + '&nbsp;&nbsp;'
+                    + '<span class="glyphicon glyphicon-heart"></span> '
+                    + numberWithCommas(json.items[0].statistics.favoriteCount) + ' favorites'
+                    + '</p>';
+                var views = '<p>' 
+                    + '<span class="glyphicon glyphicon-eye-open"></span> ' 
+                    + numberWithCommas(json.items[0].statistics.viewCount) + ' views'
+                    + '&nbsp;&nbsp;'
+                    + '<span class="glyphicon glyphicon glyphicon-comment"></span> '
+                    + numberWithCommas(json.items[0].statistics.commentCount) + ' comments'
+                    + '</p>';
+                
+                // combine the parts/update the html
+                el.innerHTML = uploaded + likes + views;
+            });
+        };
+    });
+}
+
+load_videos();
