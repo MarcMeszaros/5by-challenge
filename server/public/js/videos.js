@@ -27,6 +27,7 @@ function create_video_dom(video) {
 
     // video title
     var title = document.createElement('h3');
+    title.className = 'title';
     title.innerHTML = video.media.oembed.title;
     details.appendChild(title);
 
