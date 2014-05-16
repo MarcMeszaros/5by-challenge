@@ -14,6 +14,7 @@ function date2human(dateStr) {
 }
 
 function create_video_dom(video) {
+    console.log(video);
     var elem = document.createElement('div')
     elem.className = 'col-lg-12 video'
 
@@ -43,6 +44,13 @@ function create_video_dom(video) {
     description.className = 'text-muted';
     description.innerHTML = video.media.oembed.description;
     details.appendChild(description);
+
+    var videoDetails = document.createElement('p');
+    videoDetails.className = 'details';
+    videoDetails.innerHTML = '<span class="glyphicon glyphicon-film"></span><span class="definition"></span>'
+        + ' - <span class="glyphicon glyphicon-user"></span>'
+        + ' <a href="' + video.media.oembed.author_url + '">' + video.media.oembed.author_name + '</a>';
+    details.appendChild(videoDetails);
 
     // stats
     var stats = document.createElement('div');
@@ -119,9 +127,33 @@ ajax({
             url:  youtube_base_url + '?id=' + video_id + '&key=' + youtube_api_key + '%20&part=snippet,contentDetails,statistics'
         }, function(resp, el) {
             var json = JSON.parse(resp.response);
-            var uploaded = '<p><span class="glyphicon glyphicon-plus"></span> Published: ' + date2human(json.items[0].snippet.publishedAt) + '</p>';
-            var likes = '<p><span class="glyphicon glyphicon-thumbs-up"></span> Likes: ' + numberWithCommas(json.items[0].statistics.likeCount) + '</p>';
-            var views = '<p><span class="glyphicon glyphicon-eye-open"></span> Views: ' + numberWithCommas(json.items[0].statistics.viewCount) + '</p>';
+            
+            // add the video quality
+            var details = el.parentNode.getElementsByClassName('details')[0];
+            var definition = details.getElementsByClassName('definition')[0];
+            definition.innerHTML = ' ' + json.items[0].contentDetails.definition.toUpperCase()
+
+            // add the stats
+            var uploaded = '<p><span class="glyphicon glyphicon-cloud-upload"></span> ' + date2human(json.items[0].snippet.publishedAt) + '</p>';
+            var likes = '<p>'
+                + '<span class="glyphicon glyphicon-thumbs-up"></span> '
+                + numberWithCommas(json.items[0].statistics.likeCount) + ' likes'
+                + '&nbsp;&nbsp;'
+                + '<span class="glyphicon glyphicon-thumbs-down"></span> '
+                + numberWithCommas(json.items[0].statistics.dislikeCount) + ' dislikes'
+                + '&nbsp;&nbsp;'
+                + '<span class="glyphicon glyphicon-heart"></span> '
+                + numberWithCommas(json.items[0].statistics.favoriteCount) + ' favorites'
+                + '</p>';
+            var views = '<p>' 
+                + '<span class="glyphicon glyphicon-eye-open"></span> ' 
+                + numberWithCommas(json.items[0].statistics.viewCount) + ' views'
+                + '&nbsp;&nbsp;'
+                + '<span class="glyphicon glyphicon glyphicon-comment"></span> '
+                + numberWithCommas(json.items[0].statistics.commentCount) + ' comments'
+                + '</p>';
+            
+            // combine the parts/update the html
             el.innerHTML = uploaded + likes + views;
         });
     };
