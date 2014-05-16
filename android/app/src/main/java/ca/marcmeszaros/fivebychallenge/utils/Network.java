@@ -18,6 +18,11 @@ public class Network {
         mContext = context;
     }
 
+    /**
+     * Test if a network interface is available.
+     *
+     * @return a boolean representing if a network interface is available
+     */
     public boolean isConnected() {
         ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo info = cm.getActiveNetworkInfo();
@@ -27,8 +32,15 @@ public class Network {
         return false;
     }
 
-    public boolean isConnectedToServer(String url, int timeout) {
-        try{
+    /**
+     * Test if the client can connect to a specific url.
+     *
+     * @param url the url to test
+     * @param timeout the timeout in milliseconds
+     * @return a boolean representing if you can connect or not
+     */
+    public boolean canConnectToUrl(String url, int timeout) {
+        try {
             URL myUrl = new URL(url);
             URLConnection connection = myUrl.openConnection();
             connection.setConnectTimeout(timeout);

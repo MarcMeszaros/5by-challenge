@@ -29,11 +29,11 @@ public class VideoListLoader extends AsyncTaskLoader<List<Video>> {
 
     @Override
     public List<Video> loadInBackground() {
-        if (netInfo.isConnected()) {
+        if (netInfo.isConnected() && netInfo.canConnectToUrl(FivebyClient.getInstance().getBaseUrl(), 5000)) {
             Pager<Video> videos = videoRes.getVideos();
             return videos.objects;
         }
-        Log.i(TAG, "No network?");
+        Log.w(TAG, "No network?");
         return new ArrayList<Video>();
     }
 }
