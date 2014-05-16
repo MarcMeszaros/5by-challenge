@@ -11,7 +11,7 @@ to serve up the website and API.
 ## System Requirements
 The following system requirements are assumed to be installed.
 
-* Node.js
+* Node.js 0.10+
 * MongoDB 2.6+
 
 ## Setup

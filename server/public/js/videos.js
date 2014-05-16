@@ -1,20 +1,11 @@
-var youtube_base_url = 'https://www.googleapis.com/youtube/v3/videos';
-var youtube_api_key = 'AIzaSyBUHESSsR4ijJ3pFrExVePUQhTs8ulEEuk';
+/**
+Build the dom element for a video listing. Some of the various parts are created
+by building the element programaticaly. Some of the other parts are created by
+just concatenating the string that represents the DOM elements.
 
-function date2human(dateStr) {
-    var date = new Date(dateStr);
-    var options = {
-        year: "numeric", 
-        month: "short",
-        day: "numeric", 
-        hour: "2-digit", 
-        minute: "2-digit"
-    };
-    return date.toLocaleTimeString('en-us', options);
-}
-
+PS: Templating libraries would be much easier... (ie. handlebars, etc.)
+*/
 function create_video_dom(video) {
-    console.log(video);
     var elem = document.createElement('div')
     elem.className = 'col-lg-12 video'
 
@@ -59,7 +50,7 @@ function create_video_dom(video) {
 
     // control buttons
     // in this case, create the embed iframe on the fly (with autoplay), and
-    // replace the thumbnail
+    // replace the thumbnail when the "onclick" event is triggered
     var play = document.createElement('button');
     play.className = 'btn btn-primary';
     play.innerHTML = '<span class="glyphicon glyphicon-play"></span> Play';
@@ -73,6 +64,7 @@ function create_video_dom(video) {
     };
     controls.appendChild(play);
 
+    // go to video element
     var gotovid = document.createElement('a');
     gotovid.className = 'btn btn-primary';
     gotovid.role = 'button';
@@ -81,6 +73,8 @@ function create_video_dom(video) {
     gotovid.innerHTML = '<span class="glyphicon glyphicon-play-circle"></span> Go To Video';
     controls.appendChild(gotovid);
 
+    // delete video
+    // TODO add fancy transition instead of just removing the element
     var deletevid = document.createElement('button');
     deletevid.className = 'btn btn-danger';
     deletevid.innerHTML = '<span class="glyphicon glyphicon-trash"></span>';
@@ -106,12 +100,13 @@ function create_video_dom(video) {
     return elem;
 }
 
-// use our helper function to make an ajax call
+// use our helper function to make an ajax call to our API to get the list of
+// videos, iterate through the items, build each listing using the function above
 ajax({
     type: 'GET',
     url: '/api/videos'
 }, function(resp){
-    var json = JSON.parse(resp.response);
+    var json = JSON.parse(resp);
 
     // loop through the videos, build the dom object and append
     for (var i = 0; i < json.objects.length; i++) {
@@ -120,13 +115,11 @@ ajax({
         document.getElementById('videos').appendChild(elem);
         var stats = elem.getElementsByClassName('stats')[0];
         
-        // make the ajax call to get data from youtube
-        ajax({
-            el: stats,
-            type: 'GET',
-            url:  youtube_base_url + '?id=' + video_id + '&key=' + youtube_api_key + '%20&part=snippet,contentDetails,statistics'
+        // make the call to get data from youtube
+        youtube_details(video_id, {
+            el: stats
         }, function(resp, el) {
-            var json = JSON.parse(resp.response);
+            var json = JSON.parse(resp);
             
             // add the video quality
             var details = el.parentNode.getElementsByClassName('details')[0];

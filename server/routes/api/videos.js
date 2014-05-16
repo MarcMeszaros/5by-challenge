@@ -2,6 +2,7 @@ var request = require('request');
 var express = require('express');
 var router = express.Router();
 
+// small function to parse a youtube url and extract the video id
 function get_youtube_id_from_url(url) {
     var patt = new RegExp('v=([0-9a-zA-Z_-])+');
     var id = patt.exec(url);
