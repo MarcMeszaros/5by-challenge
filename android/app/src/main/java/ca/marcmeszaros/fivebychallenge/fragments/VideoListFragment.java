@@ -3,7 +3,6 @@ package ca.marcmeszaros.fivebychallenge.fragments;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,8 +17,11 @@ import ca.marcmeszaros.fivebychallenge.activities.PlayerActivity;
 import ca.marcmeszaros.fivebychallenge.adapters.VideoListAdapter;
 import ca.marcmeszaros.fivebychallenge.loaders.VideoListLoader;
 import ca.marcmeszaros.fivebychallenge.api.v1.objects.Video;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 
-public class VideoListFragment extends FivebyListFragment implements LoaderManager.LoaderCallbacks<List<Video>>, AdapterView.OnItemClickListener {
+public class VideoListFragment extends FivebyListFragment implements LoaderManager.LoaderCallbacks<List<Video>>, AdapterView.OnItemClickListener, OnRefreshListener {
 
     private static final String TAG = "VideoListFragment";
 
@@ -28,6 +30,7 @@ public class VideoListFragment extends FivebyListFragment implements LoaderManag
     }
 
     private VideoListAdapter videoAdapter;
+    private PullToRefreshLayout mPullToRefreshLayout;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -50,6 +53,26 @@ public class VideoListFragment extends FivebyListFragment implements LoaderManag
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_video_list, null);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // This is the View which is created by ListFragment
+        ViewGroup viewGroup = (ViewGroup) view;
+
+        // We need to create a PullToRefreshLayout manually
+        mPullToRefreshLayout = new PullToRefreshLayout(viewGroup.getContext());
+
+        // Now setup the PullToRefreshLayout
+        ActionBarPullToRefresh.from(getActivity())
+                .insertLayoutInto(viewGroup) // We need to insert the PullToRefreshLayout into the Fragment's ViewGroup
+                // We need to mark the ListView and it's Empty View as pullable
+                // because they are not direct children of the ViewGroup
+                .theseChildrenArePullable(getListView(), getListView().getEmptyView())
+                .listener(this)
+                .setup(mPullToRefreshLayout); // Finally commit the setup to our PullToRefreshLayout
     }
 
     @Override
@@ -76,6 +99,7 @@ public class VideoListFragment extends FivebyListFragment implements LoaderManag
         // old cursor once we return.)
         Log.d(TAG, "loader size: " + data.size());
         videoAdapter.setData(data);
+        mPullToRefreshLayout.setRefreshComplete();
         setListShown(true);
     }
 
@@ -95,5 +119,10 @@ public class VideoListFragment extends FivebyListFragment implements LoaderManag
         Intent intent = new Intent(getActivity(), PlayerActivity.class);
         intent.setAction(video.media.oembed.video_id);
         startActivity(intent);
+    }
+
+    @Override
+    public void onRefreshStarted(View view) {
+        getLoaderManager().restartLoader(LOADERS.VIDEOS, null, this).forceLoad();
     }
 }
