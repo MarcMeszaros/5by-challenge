@@ -8,6 +8,7 @@ function ajax(options, success, failure) {
     var option = options || {};
     var url = options.url || 'http://localhost:3000/api/videos';
     var type = options.type || 'GET';
+    var el = options.el || null;
 
     // create the xhr request
     var xmlhttp;
@@ -24,11 +25,11 @@ function ajax(options, success, failure) {
         // TODO: maybe we should care about 1xx and 3xx as success? maybe later...
         if (xmlhttp.readyState == 4 && (xmlhttp.status >= 200 && xmlhttp.status < 300)) {
             if (typeof success === 'function') {
-                success(xmlhttp);
+                success(xmlhttp, el);
             }
         } else {
             if (typeof failure === 'function') {
-                failure(xmlhttp);
+                failure(xmlhttp, el);
             }
         }
     };
@@ -36,4 +37,11 @@ function ajax(options, success, failure) {
     // execute the request
     xmlhttp.open(type, url, true);
     xmlhttp.send();
+}
+
+/**
+Helper function to add a comma to numbers
+*/
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

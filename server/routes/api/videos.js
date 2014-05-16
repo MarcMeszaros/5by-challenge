@@ -4,8 +4,11 @@ var router = express.Router();
 
 function get_youtube_id_from_url(url) {
     var patt = new RegExp('v=([0-9a-zA-Z_-])+');
-    var id = patt.exec(url)[0].substr(2) || '';
-    return id;
+    var id = patt.exec(url);
+    if (id != null && id.length > 0) {
+        return id[0].substr(2);
+    }
+    return '';
 }
 
 // GET videos

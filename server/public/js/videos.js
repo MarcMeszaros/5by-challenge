@@ -1,5 +1,19 @@
+var youtube_base_url = 'https://www.googleapis.com/youtube/v3/videos';
+var youtube_api_key = 'AIzaSyBUHESSsR4ijJ3pFrExVePUQhTs8ulEEuk';
+
+function date2human(dateStr) {
+    var date = new Date(dateStr);
+    var options = {
+        year: "numeric", 
+        month: "short",
+        day: "numeric", 
+        hour: "2-digit", 
+        minute: "2-digit"
+    };
+    return date.toLocaleTimeString('en-us', options);
+}
+
 function create_video_dom(video) {
-    console.log(video);
     var elem = document.createElement('div')
     elem.className = 'col-lg-12 video'
 
@@ -29,6 +43,11 @@ function create_video_dom(video) {
     description.className = 'text-muted';
     description.innerHTML = video.media.oembed.description;
     details.appendChild(description);
+
+    // stats
+    var stats = document.createElement('div');
+    stats.className = 'stats';
+    details.appendChild(stats);    
 
     // control buttons
     // in this case, create the embed iframe on the fly (with autoplay), and
@@ -89,6 +108,21 @@ ajax({
     // loop through the videos, build the dom object and append
     for (var i = 0; i < json.objects.length; i++) {
         var elem = create_video_dom(json.objects[i]);
+        var video_id = json.objects[i].media.oembed.video_id;
         document.getElementById('videos').appendChild(elem);
+        var stats = elem.getElementsByClassName('stats')[0];
+        
+        // make the ajax call to get data from youtube
+        ajax({
+            el: stats,
+            type: 'GET',
+            url:  youtube_base_url + '?id=' + video_id + '&key=' + youtube_api_key + '%20&part=snippet,contentDetails,statistics'
+        }, function(resp, el) {
+            var json = JSON.parse(resp.response);
+            var uploaded = '<p><span class="glyphicon glyphicon-plus"></span> Published: ' + date2human(json.items[0].snippet.publishedAt) + '</p>';
+            var likes = '<p><span class="glyphicon glyphicon-thumbs-up"></span> Likes: ' + numberWithCommas(json.items[0].statistics.likeCount) + '</p>';
+            var views = '<p><span class="glyphicon glyphicon-eye-open"></span> Views: ' + numberWithCommas(json.items[0].statistics.viewCount) + '</p>';
+            el.innerHTML = uploaded + likes + views;
+        });
     };
 });
