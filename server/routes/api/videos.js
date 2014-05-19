@@ -37,7 +37,10 @@ router.get('/videos', function(req, res) {
 
     // resume scrapping reddit using the after param
     db.meta.findOne({name: 'after'}, function(err, doc){
-        var url = 'http://www.reddit.com/hot.json?after=' + doc.value;
+        var url = 'http://www.reddit.com/hot.json';
+        if (doc != null) {
+            url += '?after=' + doc.value;
+        }
 
         // get from redit
         // TODO: build some sort of worker/job queue to do this in the background
